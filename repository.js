@@ -1,40 +1,27 @@
-// let users = [
-//     {
-//         id: 1,
-//         firstName: 'ben',
-//         lastName: 'ben',
-//         image: true,
-//         pdf: true,
-//     },
-//     {
-//         id: 2,
-//         firstName: 'olya',
-//         lastName: 'ben',
-//         image: true,
-//         pdf: true,
-//     },
-//     {
-//         id: 3,
-//         firstName: 'nikita',
-//         lastName: 'ben',
-//         image: true,
-//         pdf: true,
-//     },
-// ];
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema({
+    firstName: String
+});
+const User = mongoose.model('Users', userSchema);
+
 
 const {readJsonFromFile, writeJsonToFile} = require("./fs-utils");
 
 const getUsers = () => {
-    return readJsonFromFile("db");
+    return User.find();
 };
 
-const addUser = async (name) => {
-    let users = await getUsers();
-    let newUser = {
-        id: users.length + 1,
-        firstName: name,
-    };
-    return writeJsonToFile("db",[...users, newUser])
+const addUser = async (firstName) => {
+    const user = new User({firstName});
+    return user.save()
+    //
+    // let users = await getUsers();
+    // let newUser = {
+    //     id: users.length + 1,
+    //     firstName: name,
+    // };
+    // return writeJsonToFile("db",[...users, newUser])
 };
 
 exports.getUsers = getUsers;

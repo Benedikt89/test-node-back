@@ -3,12 +3,16 @@ const users = require('./users-router');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+const mongoose = require("mongoose");
+mongoose.connect('mongodb://localhost/back-test', {useNewUrlParser: true});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error'));
+db.once('open', function () {
+});
+
 //created expressApp
 const app = express();
-
-
-//
-
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -28,8 +32,6 @@ app.get('/tasks', (req, res)=>{
 app.use((req, res)=>{
     res.send(404)
 });
-
-
 
 
 

@@ -22,7 +22,8 @@ router.get('/:id', async (req, res)=>{
 
 router.post('/', async (req, res)=>{
     let name = req.body.firstName;
-    let result = await addUser(name);
+    await addUser(name);
+
     res.send({success: true});
 });
 
