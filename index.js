@@ -30,7 +30,7 @@ app.get('/tasks', (req, res)=>{
 
 //middleware
 app.use((req, res)=>{
-    res.send(404)
+    res.sendStatus(404)
 });
 
 
