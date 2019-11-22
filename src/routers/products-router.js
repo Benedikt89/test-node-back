@@ -1,11 +1,45 @@
 let {getProducts, getProduct, updateProduct, deleteProduct, addProduct} = require('../dal/products-repository');
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        let type = req.params.type;
+        let path = `static/uploads/${type}`;
+        //fs.mkdirsSync(path);
+        cb(null, `static/uploads`);
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimeType === 'image/jpeg'){
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
+const upload = multer({
+    storage: storage
+//    dest: `uploads/`,
+//    limits: {fileSize: 1024 * 1024 * 5},
+//    fileFilter: fileFilter,
+});
+
 
 router.get('/', async (req, res)=>{
     let products = await getProducts(req.query.search);
-    res.send(products);
-    console.log('getUsers');
+    try {
+        res.send(products);
+        console.log('getUsers success');
+    }
+    catch (e) {
+        res.send(e.message)
+    }
+
 });
 
 router.get('/:id', async (req, res)=>{
@@ -16,9 +50,9 @@ router.get('/:id', async (req, res)=>{
 });
 
 router.put('/', async (req, res)=>{
-    let newProduct = req.body.name;
+    let newProductName = req.body.name;
     const userId = req.body.id;
-    await updateProduct(userId, newProduct);
+    await updateProduct(userId, newProductName);
     res.send(204)
 });
 router.delete('/:id', async (req, res)=>{
@@ -26,11 +60,22 @@ router.delete('/:id', async (req, res)=>{
     await deleteProduct(userId);
     res.send(204)
 });
-router.post('/', async (req, res)=>{
-    let name = req.body.name;
-    await addProduct(name);
-
-    res.send({success: true});
+router.post('/', upload.single('image'), async (req, res, next)=>{
+    const file = req.file;
+    if( !file ){
+        const error = new Error('Please upload a file');
+        error.httpStatusCode = 400;
+        return next(error)
+    }
+    try {
+        console.log(req.file);
+        let name = req.body.name;
+        let result = await addProduct(name);
+        res.send(result);
+    } catch(error) {
+        console.log(error);
+        res.send(400);
+    }
 });
 
 module.exports = router;

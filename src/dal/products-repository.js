@@ -31,8 +31,8 @@ const getProducts = (search) => {
 const getProduct = (userId) => {
     return Product.find({_id: userId})
 };
-const updateProduct = (userId, newName) => {
-    return Product.update({_id: userId}, {firstName: newName})
+const updateProduct = (userId, newProductName) => {
+    return Product.update({_id: userId}, {name: newProductName})
 };
 const deleteProduct = (id) => {
     return Product.deleteOne({_id: id});
@@ -40,6 +40,14 @@ const deleteProduct = (id) => {
 const addProduct = async (name) => {
     const user = new Product({name});
     return user.save()
+        .then((res)=>{
+        return {
+            pizza: res
+        }})
+        .catch(err=>{
+            console.log(err);
+            return {error: err}
+        })
 };
 
 exports.getProducts = getProducts;

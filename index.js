@@ -8,6 +8,7 @@ const products = require('./src/routers/products-router');
 
 const mongoose = require("mongoose");
 mongoose.connect('mongodb://localhost/pizzas', {useNewUrlParser: true});
+mongoose.Promise = global.Promise;
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
@@ -20,11 +21,12 @@ const app = express();
 app.use(cors());
 app.use(morgan('dev'));
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/static'));
 
 app.get('/', (req, res)=>{
-    res.send('Hello World');
+    res.sendFile(__dirname + '/static/index.html');
 });
 
 app.use('/users', users);
