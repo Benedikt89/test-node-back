@@ -1,4 +1,4 @@
-let {getUsers, addUser, deleteUser, getUser, updateUser} = require('./repository');
+let {getUsers, addUser, deleteUser, getUser, updateUser} = require('../dal/users-repository');
 const express = require("express");
 const router = express.Router();
 

@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('Users', userSchema);
 
 
-const {readJsonFromFile, writeJsonToFile} = require("./fs-utils");
+const {readJsonFromFile, writeJsonToFile} = require("../../fs-utils");
 
 const getUsers = (search) => {
     if (!search)
