@@ -11,22 +11,21 @@ const storage = multer.diskStorage({
         cb(null, `static/uploads`);
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname)
+        cb(null, Date.now()+ file.originalname)
     }
 });
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimeType === 'image/jpeg'){
+    if (file.mimetype === 'image/png'|| file.mimetype === 'image/jpg'){
         cb(null, true);
     } else {
-        cb(null, false);
+        cb(new Error('message'), false);
     }
 };
 const upload = multer({
-    storage: storage
-//    dest: `uploads/`,
-//    limits: {fileSize: 1024 * 1024 * 5},
-//    fileFilter: fileFilter,
+    storage: storage,
+    limits: {fileSize: 1024 * 1024 * 5},
+//    fileFilter: fileFilter
 });
 
 
@@ -68,9 +67,8 @@ router.post('/', upload.single('image'), async (req, res, next)=>{
         return next(error)
     }
     try {
-        console.log(req.file);
-        let name = req.body.name;
-        let result = await addProduct(name);
+        let product = {...req.body, photo: file.path};
+        let result = await addProduct(product);
         res.send(result);
     } catch(error) {
         console.log(error);

@@ -24,6 +24,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/static'));
+app.use('/static/uploads', express.static(__dirname + '/static/uploads'));
 
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + '/static/index.html');

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
     name: {type:String, required: true},
+    photo: {type:String, required: true},
     // price: {type: Number, required: true},
     // size: {type: Number, required: true},
     // text_long: {type:String, required: true},
@@ -12,7 +13,7 @@ const Product = mongoose.model('pizzas', productSchema);
 const getProducts = (search) => {
     if (!search)
         return Product.find()
-            .select('name price _id')
+            .select('name price _id photo')
             .exec()
             .then(docs => {
                 return {
@@ -21,7 +22,8 @@ const getProducts = (search) => {
                         return {
                             id: doc._id,
                             name: doc.name,
-                            price: doc.price
+                            price: doc.price,
+                            photo: `http://localhost:8000/${doc.photo}`
                         }
                     })
                 }
@@ -37,8 +39,8 @@ const updateProduct = (userId, newProductName) => {
 const deleteProduct = (id) => {
     return Product.deleteOne({_id: id});
 };
-const addProduct = async (name) => {
-    const user = new Product({name});
+const addProduct = async (product) => {
+    const user = new Product(product);
     return user.save()
         .then((res)=>{
         return {
