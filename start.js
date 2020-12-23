@@ -5,6 +5,6 @@ require("@babel/register")({
         ["@babel/transform-runtime"]
     ]
 });
-
+require("dotenv").config({ path: '.env.dev' });
 // Import the rest of our application.
 module.exports = require('./app.js');

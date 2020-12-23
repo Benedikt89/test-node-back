@@ -8,9 +8,8 @@ router.get('/',
     function (req, res) {
         try {
             todosRepository.getTodos().then(todos => {
-                console.log(todos);
                 res.send(todos);
-                console.log('get Products');
+                console.log('get todos');
             }).catch(e => console.log(e));
         } catch (e) {
             console.log(e);
@@ -53,7 +52,7 @@ router.delete('/:id',
     });
 
 router.post('/',
-    async (req, res, next) => {
+    async (req, res) => {
         try {
             let todo = {...req.body};
             let result = await todosRepository.addTodo(todo);
