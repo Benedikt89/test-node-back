@@ -17,6 +17,7 @@ import logger from 'morgan';
 
 import indexRouter from './routes/index';
 import todosRouter from './routes/todos';
+import usersRouter from './routes/users';
 
 
 const corsOptions = {
@@ -91,6 +92,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //
 app.use('/', indexRouter);
 app.use('/todos', todosRouter);
+app.use('/users', usersRouter);
 
 // ----------------------------------------
 // Error Handling
